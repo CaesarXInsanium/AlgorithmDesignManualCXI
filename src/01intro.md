@@ -72,6 +72,10 @@ principle in terms of previously defined and understood problems.
 Another way to put is to translate problems in the real world related to datasets,
 networks, game logic and boil them down to mathematical constructs.
 
+Always make sure to test model against simple version of problem at hand in order
+to verify that model of problem is correct. Verifying the correctness is important
+before even attempting to design the relevant algorithm
+
 - `Permutations`: arrangements/ordering of items. Ways to shuffle deck
 - `Subsets`: selections from larger sets of items. Choosing groups of 3 from a classroom.
   Order does not matter.
@@ -84,3 +88,69 @@ networks, game logic and boil them down to mathematical constructs.
 - `Strings`: sequences of characters and patterns
 
 ### Recursive Objects
+
+Recursion often occurs in the world of data structures and algorithms some examples
+include,
+
+- Permutations: methods of ordering items in set
+- subsets: subsets of bigger set
+- graphs: traversing edges and vertices
+- point sets: taking points in space and dividing them into groups
+- polygons: making a new line from preexisting polygon vertices in order to make
+  two new polygons. Will recursively generate two new polygons
+- strings: just another implementation of subsets
+
+Recursive thing are defined by the base case and then bigger more complicated
+versions of the same problem that are related to the base case. For example base
+string has zero characters in it. Base graph has one vertex.
+
+## Proof By Contradiction
+
+The basic idea behind proof by contradiction is assuming that premise if false
+and then deriving a logical consequence of it that contradicts assumption, after
+which it is proven that statement is true.
+
+Most famous example is Euclid's proof of an infinite number of primes.
+
+## Estimation
+
+Sometimes close is good enough, estimation is valid solution if problem is two big
+and complicated. Especially if values to be measured are continuous instead of discrete.
+
+However, the estimations must be based on known correct information. Principled
+calculations give functions to known values and analogies are to be used in order
+to compare current problem at hand with previous and similar problems.
+
+Even if correct answer cannot be calculated directly use other related information
+in order to try and derive the true value.
+
+For example is a number of items in jar cannot be counted, then use dimensions and
+weight of jar and information on the items inside the jar in order to get close.
+
+## Exercises
+
+```text
+1-1
+a = -1
+b = -2
+a + b = -3
+-3 < -1
+-3 < -2
+
+1-2
+a = -1
+b = 2
+a * b = -2
+-2 < -1
+-2 < 2
+
+1-5
+all correct sets{(1,2,9,10)}
+a) (1,2,9,10), are items not in order  as done by algorithm
+b) (1,2,9,10), are not in ordered by size, 5 is ignored
+c) given S = { 1,2,3,4,11} T = 12
+
+1-6
+Finding the smallest possible subset of sets that has unique values representitive
+of everything that shows up on all the subsets
+```
