@@ -153,4 +153,11 @@ c) given S = { 1,2,3,4,11} T = 12
 1-6
 Finding the smallest possible subset of sets that has unique values representitive
 of everything that shows up on all the subsets
+
+1-7
+The perfect counter example for Graph that is a set of two sets of V vertices
+and E edges, is one where there is only pairs of vertices connect by single edge
+each. Technically there are all the largest clique but since they are all the
+degree only the one that shows up first from the sorting algorithm will be returned
+as correct answer
 ```
