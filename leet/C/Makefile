@@ -9,7 +9,3 @@ $(BUILD_DIR):
 
 clean:
 	rm -rf $(BUILD_DIR)
-	clear
-
-
-

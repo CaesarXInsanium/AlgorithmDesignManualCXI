@@ -34,6 +34,8 @@ Average case is useful when it comes to randomized algorithms.
 
 ## The Big O Notation
 
+[Video Link](https://youtu.be/z1mkCe3kVUA?list=PLOtl7M3yp-DX6ic0HGT0PUX_wiNmkWkXx&t=2059)
+
 Big O notation at its simplest serves as a simple way to classifying the worst case
 time complexity of algorithms in the form of a function over the size of problem
 set. However, it should be noted that the true time complexity of algorithms is
@@ -176,4 +178,20 @@ Nested summations occur when dealing with nested loops. This is most apparent in
 matrix multiplication.
 
 A matrix multiplication of matrices A and B is defined as the dot product of the
-different rows of A and corresponding columns of B
+different rows of A and corresponding columns of B. This is usually implemented
+with a triple nested for loops.
+
+## Summations
+
+Mathematical summation is notation that denotes the finite or infinite sum of elements
+following a pattern.
+
+$$
+\sum_{i=1}^{n}f(i)= f(1) + f(2) + .. + f(n)
+$$
+
+Some types of summations need to be recognized
+
+- sum of *n* ones is *n*
+- sum of power of integers is power
+- sum of geometric progression
