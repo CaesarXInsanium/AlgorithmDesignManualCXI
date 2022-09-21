@@ -5,16 +5,22 @@ RAM model and the asymptotic analysis of computational complexity.
 
 ## RAM Model of Analysis
 
-RAM models stands for *Random Access Machine*. This model has several assumptions
+[Video Link](https://youtu.be/z1mkCe3kVUA?list=PLOtl7M3yp-DX6ic0HGT0PUX_wiNmkWkXx&t=2059)
+
+RAM model stands for *Random Access Machine*. This model has several assumptions.
+This is a huge simplification of how computer in general work.
 
 - Basic arithmetic, (=,-, \*, /) take one time step
-- loops and subroutines are not simple, they are the addition of all the other
-  steps inside them
+- loops and function/subroutines are not simple, they are the addition of all the
+  other steps inside them
 - accessing any location in memory take one time step. All memory is available at
   all times at equal access time.
 
 RAM model is inaccurate, but it is still the best model for understanding generally
 if an algorithm is doing well or if it is not. RAM model is useful abstraction.
+
+If it is like assuming that the earth is flat only in small enough context, but the
+reality must be acknowledged in big enough context.
 
 ### Best-case, Worst-case and Average Case Complexity
 
@@ -34,17 +40,15 @@ Average case is useful when it comes to randomized algorithms.
 
 ## The Big O Notation
 
-[Video Link](https://youtu.be/z1mkCe3kVUA?list=PLOtl7M3yp-DX6ic0HGT0PUX_wiNmkWkXx&t=2059)
-
 Big O notation at its simplest serves as a simple way to classifying the worst case
 time complexity of algorithms in the form of a function over the size of problem
 set. However, it should be noted that the true time complexity of algorithms is
 usually not a smooth predictable function and can vary. Sometimes the effort to
 get the most details possible is not worth it.
 
-- \\(O(n) \\) is the upper bound of true function $f(n)$, the worst case
-- \\(\Omega(n) \\)is lower bound, the best case
-- \\(\theta(n) \\)is average case, bound exactly in middle of both
+- \\(O(n) \\) is the upper bound of true function $f(n)$,
+- \\(\Omega(n) \\)is lower bound,
+- \\(\theta(n) \\)is average case
 
 Big O notation deals less with how much time exactly it takes for an algorithm to
 produce an output but rather much the time changes relatively to the size of
@@ -52,6 +56,12 @@ the problem.
 
 A function can be classified by finding a constant *c* for all values n such that
 when multiplied against one of the basis function is equal to that function f(n)
+
+However, we must also define for what values of n such statements becomes true.
+Sometimes any value of *c* cannot serve as a bound for any value of n.
+
+For example: for all \\(n > 3 \\), constant \\(c = 4 \\) that allows
+\\(c * g(n) \\) is greater than \\(f(n) \\)
 
 ## Growth Rates and Dominance Relations
 
@@ -102,14 +112,14 @@ Selection sort is one method of ordering elements in a set from smallest to larg
 void selection_sort(int s[], int n){
   int i;j;
   int min;
-  for(i = 0; i < n; i++){
-    min = i;
-    for(j =i; j < n; j++){
-      if(s[j] < s[min]){
-        min = j;
+  for(i = 0; i < n; i++){ // takes n steps
+    min = i; // one step
+    for(j =i; j < n; j++){ // n steps
+      if(s[j] < s[min]){ // one step
+        min = j; // one step
       }
     }
-    swap(&s[i], &s[min]);
+    swap(&s[i], &s[min]); // one step
   }
 }
 ```
@@ -136,6 +146,16 @@ already is.
 Best way to determine Big O is finding the largest possible number that fits into
 nested loops. Think of the worst case scenarios. Count the number of steps and find
 how max number of time a loop can go over.
+
+```c
+for(i = 1; i < n;i++){
+    j = i;
+    while((j > 0) && (s[j] < s[j - 1])){
+        swap(&s[j], &s[j-1]);
+        j = j-1;
+    }
+}
+```
 
 ### String Pattern Matching
 
@@ -195,3 +215,89 @@ Some types of summations need to be recognized
 - sum of *n* ones is *n*
 - sum of power of integers is power
 - sum of geometric progression
+
+## Logarithms
+
+[Video](https://youtu.be/9RrdOssuOY4?list=PLOtl7M3yp-DX6ic0HGT0PUX_wiNmkWkXx&t=4045)
+
+Logarithms are the inverse of an exponential function. As x grows, a logarithmic
+function grows slower and slower as x reaches infinity.
+
+Binary search is an example of an algorithm that performs in order of a logarithmic
+time. Due to the nature of how it works, each time the algorithm fails to find the
+key, the number of an item that are then searched is cut in half.
+
+Binary trees is an example of a data structure that has most of its operations
+done in logarithmic time.
+
+Logarithms can be used for multiplication and exponentiation by hand. It is done
+by using logarithmic identities and replace what ever sections in the equation
+with known logarithms, and then they are simplified in order to a nice answer.
+
+One example of an algorithm that works in logarithmic time is this implementation
+which raises number `a` to power `n`. It works by reducing the size of an exponent
+and computing an equivalent expression instead.
+
+```python
+import math
+def power(a,n):
+  if n == 0:
+    return 1
+  x = power(a, floor(n/2))
+  if is_even(n):
+    return x * x
+  else:
+    return a * x * x
+```
+
+`Harmonic Numbers` arise when we sum simple reciprocals. They can be used to analyze
+funky behaviors in other functions and algorithms.
+
+One weird example on the way that logs are use is in the United States Federal
+sentencing guidelines in which depravity or seriousness of crime has to double
+in order for the prison time to increase by one year in some examples. This is
+regards to further additions in to prison time.
+
+## Properties of Logarithms
+
+Bases in logarithms can be implicit or explicit. It is the number of which
+there is some value x that results in the determined b
+
+$$
+\log_a b = x
+$$
+
+Here is equation to convert between bases
+
+$$
+\log_a b = \frac{\log_c b}{\log_c a}
+$$
+
+Using this method it is possible to calculate any log with any base by converting
+it to a base e log or any other 'simpler' log.
+
+- The base of logarithm has no significant impact on growth rate as x approaches
+  infinity.
+- Even if problem size is squared, the increase in time is only doubled
+
+## Advanced Analysis
+
+It is necessary for analyzing the time complexity of algorithms to have some background
+and skills in mathematical manipulation and asymptotic analysis.
+
+### Esoteric Functions
+
+There are some additions to the different classes of time complexity
+
+- Inverse Ackerman's function: grows super-duper slowly, but it diverges.
+- \\( \log \log\\) this function arises in sorted array of only log n items
+- \\( \frac{ \log n}{\log \log n}\\) grows slower than the normal log n
+- log squared arise when dealing with nested data structures
+- root of n deals in n dimensional geometry math
+- \\( n^{1+\epsilon}\\) arises when dealing with arbitrarly small but adjustable
+  numbers
+
+### Limits and Dominance Functions
+
+Function *f* dominates *g8 iff the ratio \\(\frac{f(n)}{g(n)}\\) approaches zero
+as n grows to infinity.

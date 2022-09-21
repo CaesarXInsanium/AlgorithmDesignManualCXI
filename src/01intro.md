@@ -126,7 +126,6 @@ in order to try and derive the true value.
 
 For example is a number of items in jar cannot be counted, then use dimensions and
 weight of jar and information on the items inside the jar in order to get close.
-
 ## Exercises
 
 ```text
@@ -162,4 +161,4 @@ degree only the one that shows up first from the sorting algorithm will be retur
 as correct answer
 ```
 
-Check out the leet code repository, `rotate_list` and `daily_temperatures`
+Check out the Leet code repository, `rotate_list` and `daily_temperatures`
