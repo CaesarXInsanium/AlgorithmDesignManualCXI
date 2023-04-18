@@ -64,7 +64,9 @@ GENERATED :=
 OBJECTS :=
 
 GENERATED += $(OBJDIR)/linked_list.o
+GENERATED += $(OBJDIR)/main.o
 OBJECTS += $(OBJDIR)/linked_list.o
+OBJECTS += $(OBJDIR)/main.o
 
 # Rules
 # #############################################
@@ -129,6 +131,9 @@ endif
 # #############################################
 
 $(OBJDIR)/linked_list.o: linked_list.c
+	@echo $(notdir $<)
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/main.o: main.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
