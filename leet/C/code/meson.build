@@ -34,3 +34,11 @@ divide_two_int = executable(
           link_with: common_lib,
           include_directories: INC,
 )
+
+remove_k_digits = executable(
+          'remove_k_digits',
+          'remove_k_digits.c',
+          install: false,
+          link_with: common_lib,
+          include_directories: INC,
+)

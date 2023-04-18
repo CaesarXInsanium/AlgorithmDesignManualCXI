@@ -77,8 +77,8 @@ to verify that model of problem is correct. Verifying the correctness is importa
 before even attempting to design the relevant algorithm
 
 - `Permutations`: arrangements/ordering of items. Ways to shuffle deck
-- `Subsets`: selections from larger sets of items. Choosing groups of 3 from a classroom.
-  Order does not matter.
+- `Subsets/combinations`: selections from larger sets of items. Choosing groups
+  of 3 from a classroom. Order does not matter.
 - `Trees`: represent hierarchical relationships between items. Family trees,
   parents and children
 - `Graphs`: defined using edges and vertices. Map with location being vertices
@@ -126,39 +126,3 @@ in order to try and derive the true value.
 
 For example is a number of items in jar cannot be counted, then use dimensions and
 weight of jar and information on the items inside the jar in order to get close.
-## Exercises
-
-```text
-1-1
-a = -1
-b = -2
-a + b = -3
--3 < -1
--3 < -2
-
-1-2
-a = -1
-b = 2
-a * b = -2
--2 < -1
--2 < 2
-
-1-5
-all correct sets{(1,2,9,10)}
-a) (1,2,9,10), are items not in order  as done by algorithm
-b) (1,2,9,10), are not in ordered by size, 5 is ignored
-c) given S = { 1,2,3,4,11} T = 12
-
-1-6
-Finding the smallest possible subset of sets that has unique values representitive
-of everything that shows up on all the subsets
-
-1-7
-The perfect counter example for Graph that is a set of two sets of V vertices
-and E edges, is one where there is only pairs of vertices connect by single edge
-each. Technically there are all the largest clique but since they are all the
-degree only the one that shows up first from the sorting algorithm will be returned
-as correct answer
-```
-
-Check out the Leet code repository, `rotate_list` and `daily_temperatures`

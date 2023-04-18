@@ -46,7 +46,7 @@ set. However, it should be noted that the true time complexity of algorithms is
 usually not a smooth predictable function and can vary. Sometimes the effort to
 get the most details possible is not worth it.
 
-- \\(O(n) \\) is the upper bound of true function $f(n)$,
+- \\(O(n) \\) is the upper bound of true function \\(f(n)\\),
 - \\(\Omega(n) \\)is lower bound,
 - \\(\theta(n) \\)is average case
 
