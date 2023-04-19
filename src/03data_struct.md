@@ -36,7 +36,7 @@ then the new elements are copied over. Insertions are no either constant time
 or \\(O(2n)\\) since insertion might trigger a reallocation.
 
 However generally the reallocation can be done fast enough to be insignificant
-can be further mitigated with appropiate reallocation.
+can be further mitigated with appropriate reallocation.
 
 ### 3.1.2 Pointers and Linked Data Structures
 
@@ -47,4 +47,46 @@ address that point to no valid data. These are address 0x00.
 
 In a linked list node, each entry contains the relevant data itself and a pointer
 to the next item in the list. Doubly linked lists hold pointers to both the previous
-node and next item. A pointer to the head must be kept track.
+node and next item. A pointer to the head must be kept track of.
+
+Operations include searching the list, were we loop recursively/iteratively over
+the list by setting a cursor pointer and if the key is not in the current node
+then we set the current pointer to the next pointer in the node and check again.
+
+Other operations if the insertion and deletion. Insertion can be done by either
+replacing the head pointer and the setting the appropriate next pointer or, by
+looping again over the list and setting at the tail.
+
+Deletion can be accomplished in a single link list by first getting the pointer to
+the node before the target node for deletion. Then we rearrange the pointer in
+order to delete the target from existence and reallocating the node.
+
+### 3.1.3 Comparison
+
+- Linked list rarely have situations where the data structure is 'full' in the since
+  the more items can be added without requiring more allocated memory. In each node
+  is individually allocated
+- insertion and deletion are simple operations in linked lists in terms of memory
+  manipulations
+- moving pointers is always faster than moving large structures ion memory
+
+## 3.2 Containers
+
+`Container` refers to abstract data types which allow for storage of elements in
+a specific way in order to maintain certain properties. For example and array stores
+elements sequentially in memory.
+
+`Stack` is an example of a container data storage type that has push and pop operations.
+The stack maintains a first in last out property which means that the last item
+stored in the stack is always the first item to be retrieved. Push will place item
+on top of the stack and pop will remove it and return it. Used when order does not
+matter, or it needs to be reversed.
+
+`Queue` is liked a stack except that it is first in first out. This is a way to minimize
+waiting time for services and actions to be processed in a computer system. It
+is the abstract container that acts as a buffer or a waiting room. Operations include
+Enqueue which inserts item into the end of the queue and dequeue which removes from
+the start of the list.
+
+Both stacks and queues can be implemented using arrays and linked structures, it
+is only a question on the size of the container.
