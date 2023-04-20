@@ -90,3 +90,30 @@ the start of the list.
 
 Both stacks and queues can be implemented using arrays and linked structures, it
 is only a question on the size of the container.
+
+## 3.3 Dictionaries
+
+The book defines dictionaries as an abstract data type stores unique elements.
+Each time a new element is added it is checked to see if it already exists. If
+not then it is added. The goal is to only contain unique elements. These can
+be a sorted or unsorted backing data structure like an array or a linked list.
+
+The operations involved in a dictionary are
+
+- Search(D, k) → given key k, return index/entry relevant to it dictionary D if it
+  exists
+- Insert(D, x) → add unique element x to dictionary
+- Delete(D, x) → delete unique element x from dictionary
+- Max(D) → return item which generates the largest index value, used in priority
+  queues
+- Min(D) → return item which generates smallest index value
+
+Dictionaries as defined in the book is a data type used to store only unique
+items. Both implementations contain different costs and benefits. The main
+point of contention is that the time complexities of operations on unsorted
+arrays and linked lists is almost always linear since we have to iterate over
+all the elements in order to get guarantee that we found the all the information
+or correct item.
+
+This brings the point of contention that good data structure design must balance
+the time complexities of relevant operations for the task at hand.

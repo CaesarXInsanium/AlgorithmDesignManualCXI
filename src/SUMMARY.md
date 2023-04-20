@@ -1,6 +1,6 @@
 # Summary
 
-New Policy: Only do the coding exercises. LeetCode and hacker rank
+New Policy: Only do the coding exercises. LeetCode and hacker rank included
 
 - [Introduction to Algorithm Design](./01intro.md)
 - [Algorithm Analysis](./02analysis.md)
