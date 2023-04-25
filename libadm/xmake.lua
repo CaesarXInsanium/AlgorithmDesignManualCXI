@@ -17,6 +17,12 @@ target('linked_list_test')
   set_kind("binary")
   add_deps("libadm")
   add_files("tests/linked_list_test.c")
+
+target('binary_tree_test')
+  add_includedirs("include")
+  set_kind("binary")
+  add_deps("libadm")
+  add_files("tests/binary_tree_test.c")
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --

@@ -117,3 +117,7 @@ or correct item.
 
 This brings the point of contention that good data structure design must balance
 the time complexities of relevant operations for the task at hand.
+
+## 3.4 Binary Search Trees
+
+
