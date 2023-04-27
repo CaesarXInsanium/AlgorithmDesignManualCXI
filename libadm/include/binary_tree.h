@@ -9,4 +9,12 @@ typedef struct BTree {
 
 } BTree;
 
+// return pointer to node that contains key
+BTree *search_tree(BTree *l, int x);
+
+// return left most node
+BTree *find_minimum(BTree *t);
+
+// return array of values
+
 #endif

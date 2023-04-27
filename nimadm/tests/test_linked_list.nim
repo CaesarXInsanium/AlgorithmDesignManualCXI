@@ -9,6 +9,13 @@ test "linked list pop and peek":
   check list.pop() == 10
   check list.pop() == 9
 
+test "linked list len":
+  var list: LinkedList[int] = newList[int]()
+  check list.len() == 0
+  list.push(0)
+  check list.peek() == 0
+  check list.len() == 1
+
 test "linked list append":
   var list = startList(0)
   list.append(-1)
@@ -31,7 +38,7 @@ test "linked list iten_ahead":
 
   var n = list.search(5)
   var b = list.precursor(n)
-  check n == b.link
+  check n == b.succesor
 
 test "deletion":
   var list = startList(-1i64)
@@ -43,3 +50,6 @@ test "deletion":
   check list.pop() == 10
   check list.pop() == 8
 
+test "empty list":
+  var l = newList[int]()
+  check l.peek() != 0

@@ -13,12 +13,29 @@ proc newNode[T](data: T): Node[T] =
 proc unwrap*[T](self: Node[T]): T =
   return self.data
 
-proc link*[T](self: Node[T]): Node[T] = 
+proc succesor*[T](self: Node[T]): Node[T] = 
   result = self.next
+
+proc precursor*[T](self: LinkedList[T], b: Node[T]): Node[T] =
+  if self.head == nil or b == nil:
+    return nil
+  var cursor = self.head
+  while cursor.next != b:
+    cursor = cursor.next
+  
+  if cursor != nil:
+    result = cursor
+  else:
+    result = nil
 
 proc startList*[T](data: T): LinkedList[T] = 
   var head = newNode(data)
   result = LinkedList[T](head: head, size: 1)
+
+proc newList*[T](): LinkedList[T] =
+  new result
+  result.head = nil
+  result.size= 0
 
 
 proc push*[T](self: LinkedList[T], data: T) = 
@@ -50,21 +67,16 @@ proc search*[T](self: LinkedList[T], key: T): Node[T] =
     cursor = cursor.next
   result = cursor
 
-proc precursor*[T](self: LinkedList[T], b: Node[T]): Node[T] =
-  if self.head == nil or b == nil:
-    return nil
-  var cursor = self.head
-  while cursor.next != b:
-    cursor = cursor.next
-  
-  if cursor != nil:
-    result = cursor
-  else:
-    result = nil
+proc len*[T](self: LinkedList[T]): uint =
+  result = self.size
 
-proc delete*[T](self: LinkedList[T], node: Node[T]) =
+
+proc delete*[T](self: LinkedList[T], node: var Node[T]) =
   var before = self.precursor(node)
   before.next = node.next
+  self.size = self.size - 1
+  # reset function will tell garbage collector that this node is no londer needed
+  reset(node)
 
 proc `$`[T](self: LinkedList[T]): string =
   result = "LinkedList: "
