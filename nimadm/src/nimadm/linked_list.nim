@@ -45,13 +45,20 @@ proc push*[T](self: LinkedList[T], data: T) =
 
   self.size = self.size + 1
 
-proc pop*[T](self: LinkedList[T]): T =
+proc pop*[T](self: LinkedList[T], default: T): T =
+  if self.head == nil:
+    return default
   result = self.head.data
   self.head = self.head.next
   self.size = self.size - 1
 
-proc peek*[T](self: LinkedList[T]): T =
-  result = self.head.data
+
+proc peek*[T](self: LinkedList[T], default: T): T =
+  ## must provide default value in case that list is empty
+  if self.head != nil:
+     result = self.head.data
+  else:
+    result = default
 
 proc append*[T](self: LinkedList[T], data: T) =
   var cursor = self.head

@@ -1,4 +1,4 @@
-#include "linked_list.h"
+#include "adm/linked_list.h"
 #include <stdlib.h>
 
 SList *search_list(SList *self, int *x) {

@@ -1,4 +1,4 @@
-#include "linked_list.h"
+#include "adm/linked_list.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +19,7 @@ int main() {
   }
 
   key = 5;
-  assert(search_list(ll, &5) != NULL);
+  assert(search_list(ll, 5) != NULL);
 
   puts("Checking Head");
   SList *third = ll->next->next;
