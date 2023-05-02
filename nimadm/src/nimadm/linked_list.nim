@@ -1,17 +1,19 @@
 type
   Node*[T] = ref object
     next: Node[T]
-    data: T
+    value: T
 
   LinkedList*[T] = ref object
     head: Node[T]
     size: uint
 
-proc newNode[T](data: T): Node[T] =
-  result = Node[T](next: nil, data: data)
+  EmptyListError* = object of Exception
+
+proc newNode[T](value: T): Node[T] =
+  result = Node[T](next: nil, value: value)
 
 proc unwrap*[T](self: Node[T]): T =
-  return self.data
+  return self.value
 
 proc succesor*[T](self: Node[T]): Node[T] = 
   result = self.next
@@ -28,8 +30,8 @@ proc precursor*[T](self: LinkedList[T], b: Node[T]): Node[T] =
   else:
     result = nil
 
-proc startList*[T](data: T): LinkedList[T] = 
-  var head = newNode(data)
+proc startList*[T](value: T): LinkedList[T] = 
+  var head = newNode(value)
   result = LinkedList[T](head: head, size: 1)
 
 proc newList*[T](): LinkedList[T] =
@@ -38,39 +40,38 @@ proc newList*[T](): LinkedList[T] =
   result.size= 0
 
 
-proc push*[T](self: LinkedList[T], data: T) = 
-  var n = newNode(data)
+proc push*[T](self: LinkedList[T], value: T) = 
+  var n = newNode(value)
   n.next = self.head
   self.head = n
 
   self.size = self.size + 1
 
-proc pop*[T](self: LinkedList[T], default: T): T =
+proc pop*[T](self: LinkedList[T]): T {.raises: {EmptyListError}} =
   if self.head == nil:
-    return default
-  result = self.head.data
+    raise newException(EmptyListError, "Linked List is empty")
+  result = self.head.value
   self.head = self.head.next
   self.size = self.size - 1
 
 
-proc peek*[T](self: LinkedList[T], default: T): T =
-  ## must provide default value in case that list is empty
+proc peek*[T](self: LinkedList[T] ): T {.raises: EmptyListError} =
   if self.head != nil:
-     result = self.head.data
+    result = self.head.value
   else:
-    result = default
+    raise newException(EmptyListError, "LinkedList is Empty")
 
-proc append*[T](self: LinkedList[T], data: T) =
+proc append*[T](self: LinkedList[T], value: T) =
   var cursor = self.head
   while cursor.next != nil:
     cursor = cursor.next
 
-  var n = newNode(data)
+  var n = newNode(value)
   cursor.next = n
 
 proc search*[T](self: LinkedList[T], key: T): Node[T] = 
   var cursor = self.head
-  while cursor != nil and cursor.data != key:
+  while cursor != nil and cursor.value != key:
     cursor = cursor.next
   result = cursor
 
@@ -89,9 +90,6 @@ proc `$`[T](self: LinkedList[T]): string =
   result = "LinkedList: "
   var cursor = self.head
   while cursor != nil:
-    result = result & "Item: { " & $cursor.data & "}, "
+    result = result & "Item: { " & $cursor.value & "}, "
     cursor = cursor.next
   return result
-
-
-

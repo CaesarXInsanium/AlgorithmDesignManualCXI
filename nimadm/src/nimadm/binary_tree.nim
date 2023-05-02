@@ -8,6 +8,7 @@ type
     size: uint
 
 proc newTreeNode[T](value: T): TreeNode[T] = 
+  ## sample documentation
   result = TreeNode[T](value: value, left: nil, right: nil)
 
 proc insert[T](node: TreeNode[T], other: TreeNode[T]) =
