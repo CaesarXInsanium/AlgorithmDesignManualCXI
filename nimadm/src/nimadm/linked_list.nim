@@ -49,7 +49,7 @@ proc push*[T](self: LinkedList[T], value: T) =
 
 proc pop*[T](self: LinkedList[T]): T {.raises: {EmptyListError}} =
   if self.head == nil:
-    raise newException(EmptyListError, "Linked List is empty")
+    raise newException(EmptyListError, "No item to remove")
   result = self.head.value
   self.head = self.head.next
   self.size = self.size - 1
@@ -59,15 +59,19 @@ proc peek*[T](self: LinkedList[T] ): T {.raises: EmptyListError} =
   if self.head != nil:
     result = self.head.value
   else:
-    raise newException(EmptyListError, "LinkedList is Empty")
+    raise newException(EmptyListError, "No item to view")
 
 proc append*[T](self: LinkedList[T], value: T) =
-  var cursor = self.head
-  while cursor.next != nil:
-    cursor = cursor.next
+  if self.head == nil:
+    self.push(value)
+  else:
 
-  var n = newNode(value)
-  cursor.next = n
+    var cursor = self.head
+    while cursor.next != nil:
+      cursor = cursor.next
+
+    var n = newNode(value)
+    cursor.next = n
 
 proc search*[T](self: LinkedList[T], key: T): Node[T] = 
   var cursor = self.head
