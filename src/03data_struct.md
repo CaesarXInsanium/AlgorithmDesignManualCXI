@@ -120,4 +120,47 @@ the time complexities of relevant operations for the task at hand.
 
 ## 3.4 Binary Search Trees
 
+Nodes with more than one pointer allow for easier traversal and organization.
+The nodes contain data that are organized in a specific manner that maintain
+certain properties between nodes, the implementing search functionality
+is simple.
 
+`Rooted Binary Tree` is defined recursively as either being empty or with each node
+having two child trees.
+
+`Binary Search Tree` maintains the property that each left child node contains a
+value that is less than the parent and right child contains value greater than
+the parent. This allows for easy binary search as with each insertion a property
+is carefully maintained.
+
+### 3.4.1 Implementing Binary Search Trees
+
+Each node contains a value, left and right child pointers and optionally a pointer
+to the parent. A Binary search tree implements several operations.
+
+Search: works by comparing a key with the value at the root, if values match then
+pointer to root is returned. If key less than the value then we recurse and set
+to root to left child, right child if key is greater
+
+Maximum/Minimum: implement by recursing down the left and right node until we reach
+a node with no children. Then return value.
+
+Traversal: There are different ways to loop over the values in a binary tree, on
+being post order in which each item is processed first and then recursion happens.
+
+Insertion: is done by comparing the new value with the root and going down until
+we reach either a matching node or an empty spot on which we append to node.
+
+Deletion: is done by deallocating the appropriate node and then reassigning the
+child node appropriate locations in the rest of the tree and then balancing the
+resulting tree.
+
+### 3.4.2 How Good Are Binary Search Trees?
+
+These data structures work best when they are properly maintained and kept
+balanced. Time complexity is hugely dependent on the height of the tree
+and keeping all branches to the average height, not on that goes off in
+a random direction. Worst case the data is entered in sorted order and
+if not balanced will result in O(n) time complexity for search.
+
+Properly balanced tree with git O (log n) complexity.
