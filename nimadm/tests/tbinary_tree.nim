@@ -10,16 +10,18 @@ test "empty tree":
 test "pushing elements":
   var t = newBTree[float64]()
   for i in 0..9:
-    echo i
     t.push(cast[float64](i))
-    echo "th"
   # check t.peek() == 5
   check not t.empty()
 
 test "popping elements":
   var t = newBTree[float64]()
-  for i in 0..9:
-    t.push(cast[float64](i))
+  t.push(455'f64)
+  t.push(5'f64)
+  t.push(3.141592654'f64)
+  
+  # for i in 0..9:
+  #   t.push(cast[float64](i))
   check t.pop() == 0'f64
 
 

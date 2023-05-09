@@ -1,5 +1,3 @@
-import math
-
 type
   TreeNode*[T] = ref object
     left: TreeNode[T]
@@ -18,7 +16,9 @@ proc newTreeNode[T](value: T): TreeNode[T] =
   result = TreeNode[T](value: value, left: nil, right: nil)
 
 proc insert[T](node: TreeNode[T], other: TreeNode[T]): TreeSide =
-  if other.value < node.value:
+  if node == nil or other == nil:
+    return TreeSide.Left
+  elif other.value < node.value:
     result = TreeSide.Left
     if node.left == nil:
       node.left = other
@@ -32,6 +32,29 @@ proc insert[T](node: TreeNode[T], other: TreeNode[T]): TreeSide =
       discard insert(node.right, other)
   elif other.value == node.value:
     return TreeSide.Left
+
+proc rotate_ll[T](node: ptr TreeNode[T]) =
+  var n: TreeNode[T] = node[]
+  node[] = n.left
+  insert(node[], n)
+
+proc rotate_rr[T](node: ptr TreeNode[T]) =
+  var n: TreeNode[T] = node[]
+  node[] = n.right
+  insert(node[], n)
+
+proc rotate_lr[T](nodeptr: ptr TreeNode[T]) =
+  var node: TreeNode[T] = nodeptr[]
+  nodeptr[] = node.left.right
+  nodeptr.right = node.right
+  insert(nodeptr[], node)
+
+proc rotate_rl[T](nodeptr: ptr TreeNode[T]) =
+  var node: TreeNode[T] = nodeptr[]
+  nodeptr[] = node.right.left
+  nodeptr.left = node.left
+  insert(nodeptr[], node)
+
 
 proc delete[T](parent: TreeNode[T], target: TreeNode[T]) =
   var left = target.left
@@ -57,6 +80,7 @@ proc search[T](node: TreeNode[T], key: T): TreeNode =
     return search(node.left, key)
   else:
     return search(node.right, key)
+
 proc has_children[T](node: TreeNode[T]): bool =
   if node ==nil:
     return false
@@ -82,46 +106,6 @@ proc balanced[T](node: TreeNode[T]): (bool, TreeSide) =
       return (false, TreeSide.Left)
     else:
       return (true, TreeSide.Right)
-
-proc balance[T](parent: TreeNode[T], node: TreeNode[T], side: TreeSide) =
-  # balancing the root
-  var (t,sid) = balanced(node)
-  if t:
-    return
-  else:
-    case sid:
-      of TreeSide.Left: balance(node, node.left, sid)
-      of TreeSide.Right: balance(node, node.right, sid)
-  case side:
-    of TreeSide.Left:
-      echo "Left Side is Unbalanced"
-      if node.left.right == nil and node.left.left != nil:
-        var n = node
-        parent.left = node.left
-        parent.left.left = n
-      elif node.left.left == nil and node.left.right != nil:
-        var n = node
-        parent.left = node.left.right
-        parent.left.right = n
-        parent.left.left = n.left
-      else:
-        balance(node, node.left, TreeSide.Left)
-
-    of TreeSide.Right:
-      echo "Right Side is Unbalanced"
-      if node.right == nil:
-        echo "This Should not be happening" 
-      elif node.right.left == nil and node.right.right != nil:
-        var n = node
-        parent.right = node.right
-        parent.right.right = n
-      elif node.right.right == nil and node.right.left != nil:
-        var n = node
-        parent.right = node.right.left
-        parent.right.left = n
-        parent.right.right = n.right
-      else:
-        balance(node, node.right, TreeSide.Right)
 
 proc `$`[T](self: TreeNode[T]): string =
   if self == nil:
@@ -152,7 +136,6 @@ proc pop*[T](self: BinaryTree[T]): T {.raises: EmptyTreeError.} =
     elif left != nil and right != nil:
       self.root = left
       discard insert(left.right, right)
-      balance(self.root, self.root.right, TreeSide.Right)
     else:
       result = self.root.value
       var r = self.root
@@ -164,12 +147,11 @@ proc empty*[T](self: BinaryTree[T]): bool =
   result = self.root == nil
 
 proc push*[T](self: BinaryTree[T], value: T) =
-  var t = newTreeNode(value)
+  var node = newTreeNode[T](value)
   if self.root == nil:
-    self.root = t
+    self.root = node
   else:
-    var s = self.root.insert(t)
-    balance(self.root, self.root.right, s)
+    discard insert(self.root, node)
 
 proc peek*[T](self: BinaryTree[T]): T {.raises: EmptyTreeError.} =
   if self.root == nil:
