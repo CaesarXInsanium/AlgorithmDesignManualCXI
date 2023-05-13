@@ -1,3 +1,5 @@
+import std/options
+
 type
   Node*[T] = ref object
     next: Node[T]
@@ -6,8 +8,6 @@ type
   LinkedList*[T] = ref object
     head: Node[T]
     size: uint
-
-  EmptyListError* = object of Exception
 
 proc newNode[T](value: T): Node[T] =
   result = Node[T](next: nil, value: value)
@@ -47,19 +47,19 @@ proc push*[T](self: LinkedList[T], value: T) =
 
   self.size = self.size + 1
 
-proc pop*[T](self: LinkedList[T]): T {.raises: {EmptyListError}} =
+proc pop*[T](self: LinkedList[T]): Option[T] =
   if self.head == nil:
-    raise newException(EmptyListError, "No item to remove")
-  result = self.head.value
+    return none(T)
+  result = some(self.head.value)
   self.head = self.head.next
   self.size = self.size - 1
 
 
-proc peek*[T](self: LinkedList[T] ): T {.raises: EmptyListError} =
-  if self.head != nil:
-    result = self.head.value
+proc peek*[T](self: LinkedList[T] ): Option[T] =
+  if self.head == nil:
+    none(T)
   else:
-    raise newException(EmptyListError, "No item to view")
+    some(self.head.value)
 
 proc append*[T](self: LinkedList[T], value: T) =
   if self.head == nil:
@@ -73,11 +73,17 @@ proc append*[T](self: LinkedList[T], value: T) =
     var n = newNode(value)
     cursor.next = n
 
-proc search*[T](self: LinkedList[T], key: T): Node[T] = 
-  var cursor = self.head
-  while cursor != nil and cursor.value != key:
-    cursor = cursor.next
-  result = cursor
+proc search*[T](self: LinkedList[T], key: T): Option[Node[T]] = 
+  if self.head == nil:
+    return none(Node[T])
+  else:
+    var cursor = self.head
+    while cursor != nil and cursor.value != key:
+      cursor = cursor.next
+    if cursor.value == key:
+      return some(cursor)
+    else:
+      return none(Node[T])
 
 proc len*[T](self: LinkedList[T]): uint =
   result = self.size
