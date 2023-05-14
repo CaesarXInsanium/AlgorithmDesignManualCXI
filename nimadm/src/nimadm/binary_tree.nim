@@ -1,3 +1,4 @@
+import std/options
 type
   TreeNode*[T] = ref object
     left: TreeNode[T]
@@ -10,6 +11,7 @@ type
   TreeSide = enum
     Left
     Right
+    None
 
 proc newTreeNode[T](value: T): TreeNode[T] =
   ## sample documentation
@@ -17,7 +19,7 @@ proc newTreeNode[T](value: T): TreeNode[T] =
 
 proc insert[T](node: TreeNode[T], other: TreeNode[T]): TreeSide =
   if node == nil or other == nil:
-    return TreeSide.Left
+    return TreeSide.None
   elif other.value < node.value:
     result = TreeSide.Left
     if node.left == nil:
@@ -31,7 +33,7 @@ proc insert[T](node: TreeNode[T], other: TreeNode[T]): TreeSide =
     else:
       discard insert(node.right, other)
   elif other.value == node.value:
-    return TreeSide.Left
+    return TreeSide.None
 
 proc rotate_ll[T](node: ptr TreeNode[T]) =
   var n: TreeNode[T] = node[]
@@ -105,7 +107,16 @@ proc balanced[T](node: TreeNode[T]): (bool, TreeSide) =
     elif num < (-2):
       return (false, TreeSide.Left)
     else:
-      return (true, TreeSide.Right)
+      return (true, TreeSide.None)
+
+proc balance[T](node: ptr TreeNode[T]) =
+  # does this function check if thing are balanced and then 
+  var (is_balanced, side) = balanced(node[])
+  if not is_balanced:
+    case side:
+      of TreeSide.Left:
+        
+
 
 proc `$`[T](self: TreeNode[T]): string =
   if self == nil:

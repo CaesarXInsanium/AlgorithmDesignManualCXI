@@ -57,6 +57,11 @@ pub fn LinkedList(comptime T: type) type {
             self.len = self.len - 1;
             return val;
         }
+
+        pub fn peek(self: *ListSelf) ?*T {
+            var head: *Node = self.head orelse return null;
+            return &head.value;
+        }
     };
 }
 
@@ -69,4 +74,18 @@ test "init_list" {
     const List = LinkedList(i32); // defines LinkedList for i32
     var list = List.init(allocator);
     try testing.expect(@TypeOf(list) == List);
+}
+
+test "push and peek elements" {
+    const testing = std.testing;
+    // default recomended zig allocator
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena.deinit(); // destroy everything on program ending execution
+    const allocator = arena.allocator();
+    const List = LinkedList(i32); // defines LinkedList for i32
+    var list = List.init(allocator);
+    try list.push(69);
+    var wrong: i32 = 0;
+    var peek: *i32 = list.peek() orelse @ptrCast(*i32, &wrong);
+    try testing.expect(peek.* == 69);
 }

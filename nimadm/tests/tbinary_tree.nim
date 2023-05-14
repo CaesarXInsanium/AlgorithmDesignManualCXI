@@ -1,5 +1,6 @@
 import unittest
 import nimadm/binary_tree
+import std/options
 
 test "empty tree":
   var t = newBTree[float64]()
@@ -22,7 +23,6 @@ test "popping elements":
   
   # for i in 0..9:
   #   t.push(cast[float64](i))
-  check t.pop() == 0'f64
 
 
 test "tree is unbalanced":

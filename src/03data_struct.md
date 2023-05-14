@@ -163,4 +163,4 @@ and keeping all branches to the average height, not on that goes off in
 a random direction. Worst case the data is entered in sorted order and
 if not balanced will result in O(n) time complexity for search.
 
-Properly balanced tree with git O (log n) complexity.
+Properly balanced tree with O(log n) complexity.

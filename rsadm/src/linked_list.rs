@@ -4,12 +4,12 @@ pub enum NodeValid {
 }
 
 #[derive(Copy, Clone, Debug)]
-struct Node<T> {
+struct ListNode<T> {
     value: Option<T>,
     next: Option<usize>,
 }
 
-impl<T> Node<T>
+impl<T> ListNode<T>
 where
     T: Copy,
 {
@@ -55,7 +55,7 @@ where
 pub struct LinkedList<T> {
     head: Option<usize>,
     len: usize,
-    mem: Vec<Node<T>>,
+    mem: Vec<ListNode<T>>,
 }
 
 impl<T> LinkedList<T>
@@ -79,11 +79,11 @@ where
         return self.mem.len() as usize;
     }
 
-    fn node_at(&self, index: usize) -> Node<T> {
+    fn node_at(&self, index: usize) -> ListNode<T> {
         if self.mem.len() as usize > index {
             self.mem[index as usize].clone()
         } else {
-            Node::null()
+            ListNode::null()
         }
     }
 
@@ -92,7 +92,7 @@ where
     }
 
     pub fn push(&mut self, value: T) {
-        let mut node = Node::new(value);
+        let mut node = ListNode::new(value);
         let new_index = self.find_empty_spot();
         if let Some(head_index) = self.head {
             node.set_next(head_index);

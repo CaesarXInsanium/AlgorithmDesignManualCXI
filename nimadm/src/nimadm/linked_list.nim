@@ -16,9 +16,11 @@ proc unwrap*[T](self: Node[T]): T =
   return self.value
 
 proc succesor*[T](self: Node[T]): Node[T] = 
+  # This can return a null ref
   result = self.next
 
 proc precursor*[T](self: LinkedList[T], b: Node[T]): Node[T] =
+  # This can return a null ref
   if self.head == nil or b == nil:
     return nil
   var cursor = self.head
