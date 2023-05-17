@@ -164,3 +164,42 @@ a random direction. Worst case the data is entered in sorted order and
 if not balanced will result in O(n) time complexity for search.
 
 Properly balanced tree with O(log n) complexity.
+
+## 3.5 Priority Queues
+
+Priority queues are a type of abstract data structure that is used to implement
+the idea that not all data can be worked at the same time and some data is more
+important than others.
+
+This data structure support several methods
+
+- Insert(x): add element to data structure
+- FindMin/FindMax(x): extrema of elements
+- Pop(x): pop element with higher priority
+- Delete(x): remove element with pointer to x
+
+Priority queue can be implemented with unsorted, sorted arrays as well as binary
+search trees. Sorted arrays can be faster than BSTs but only in small enough
+data sets. BSTs become more efficient with large enough data sets.
+
+The key to a good priority queue implementation is storing to always keep on
+hand a pointer/reference to the smallest item inside the data structure.
+
+## 3.6 War Story: Stripping Triangles
+
+A triangle can be described with three vertices. This can mean that a set of
+6 vertices can describe 2 triangles. However, a more efficient method of describing
+triangles is starting with 3 vertices. After the third vertex each new vertex uses
+the previous two vertices to describe the next triangle. This repeats until the
+end of the buffer is reached.
+
+The question is how to take a naive mesh and represent it using the triangle
+strip method of describing the triangles. One method is starting walking from
+on of the triangles and start zigzagging our way until an edge is reached or a
+triangle that was previously visited is reached.
+
+The solution involved a priority queue in which largest strip of stripped mesh
+were peeled out and then each item in the queue was updated and then
+resorted.
+
+Best possible savings is two thirds and fifty percent savings was normally reached.

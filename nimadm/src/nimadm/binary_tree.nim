@@ -38,27 +38,29 @@ proc insert[T](node: TreeNode[T], other: TreeNode[T]): TreeSide =
 proc rotate_ll[T](node: ptr TreeNode[T]) =
   var n: TreeNode[T] = node[]
   node[] = n.left
-  insert(node[], n)
+  discard insert(node[], n)
 
 proc rotate_rr[T](node: ptr TreeNode[T]) =
   var n: TreeNode[T] = node[]
   node[] = n.right
-  insert(node[], n)
+  discard insert(node[], n)
 
 proc rotate_lr[T](nodeptr: ptr TreeNode[T]) =
   var node: TreeNode[T] = nodeptr[]
   nodeptr[] = node.left.right
   nodeptr.right = node.right
-  insert(nodeptr[], node)
+  discard insert(nodeptr[], node)
 
 proc rotate_rl[T](nodeptr: ptr TreeNode[T]) =
   var node: TreeNode[T] = nodeptr[]
   nodeptr[] = node.right.left
   nodeptr.left = node.left
-  insert(nodeptr[], node)
+  discard insert(nodeptr[], node)
 
 
 proc delete[T](parent: TreeNode[T], target: TreeNode[T]) =
+  if target == nil:
+    return
   var left = target.left
   var right = target.right
   if parent.left == target:
@@ -67,8 +69,6 @@ proc delete[T](parent: TreeNode[T], target: TreeNode[T]) =
   elif parent.right == target:
     parent.right = right
     insert(parent.left, left)
-  else:
-    raise IOError
   reset(target)
 
 
@@ -115,7 +115,30 @@ proc balance[T](node: ptr TreeNode[T]) =
   if not is_balanced:
     case side:
       of TreeSide.Left:
-        
+        var (blanced, lower_side) = balanced(node[].left)
+        if not blanced:
+          balance(node[].left.addr)
+          case lower_side:
+            of TreeSide.Left:
+              rotate_ll(node)
+            of TreeSide.Right:
+              rotate_lr(node)
+            else:
+              return
+      of TreeSide.Right:
+        var (blanced, lower_side) = balanced(node[].right)
+        if not blanced:
+          balance(node[].right.addr)
+          case lower_side:
+            of TreeSide.Left:
+              rotate_rl(node)
+            of TreeSide.Right:
+              rotate_rr(node)
+            else:
+              return
+      else:
+        return
+
 
 
 proc `$`[T](self: TreeNode[T]): string =
@@ -163,6 +186,7 @@ proc push*[T](self: BinaryTree[T], value: T) =
     self.root = node
   else:
     discard insert(self.root, node)
+    balance(self.root.addr())
 
 proc peek*[T](self: BinaryTree[T]): T {.raises: EmptyTreeError.} =
   if self.root == nil:

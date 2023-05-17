@@ -8,3 +8,5 @@ Favorite Programming Languages
 - C
 - Nim
 - Rust
+- Zig
+- Scheme implemented as GNU Guile
