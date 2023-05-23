@@ -5,8 +5,7 @@ import std/options
 test "empty tree":
   var t = newBTree[float64]()
   check t.empty()
-  expect EmptyTreeError:
-    var p = t.peek() 
+  check not t.peek().isSome()
 
 test "pushing elements":
   var t = newBTree[float64]()
@@ -21,8 +20,8 @@ test "popping elements":
   t.push(5'f64)
   t.push(3.141592654'f64)
   
-  # for i in 0..9:
-  #   t.push(cast[float64](i))
+  check t.pop().is_some()
+  check t.pop().get() == 5'f64
 
 
 test "tree is unbalanced":

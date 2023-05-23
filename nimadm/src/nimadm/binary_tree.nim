@@ -7,55 +7,50 @@ type
   BinaryTree*[T] = ref object
     root: TreeNode[T]
     size: uint
-  EmptyTreeError* = object of Exception
-  TreeSide = enum
-    Left
-    Right
-    None
 
 proc newTreeNode[T](value: T): TreeNode[T] =
   ## sample documentation
   result = TreeNode[T](value: value, left: nil, right: nil)
 
-proc insert[T](node: TreeNode[T], other: TreeNode[T]): TreeSide =
-  if node == nil or other == nil:
-    return TreeSide.None
+proc insert[T](node: TreeNode[T], other: TreeNode[T]) =
+  assert other != nil
+  if node == nil and other == nil:
+    echo "insertion with two nil nodes"
+    return
   elif other.value < node.value:
-    result = TreeSide.Left
     if node.left == nil:
       node.left = other
     else:
-      discard insert(node.left, other)
+      insert(node.left, other)
   elif other.value > node.value:
-    result = TreeSide.Right
     if node.right == nil:
       node.right = other
     else:
-      discard insert(node.right, other)
+      insert(node.right, other)
   elif other.value == node.value:
-    return TreeSide.None
+    return
 
 proc rotate_ll[T](node: ptr TreeNode[T]) =
   var n: TreeNode[T] = node[]
   node[] = n.left
-  discard insert(node[], n)
+  insert(node[], n)
 
 proc rotate_rr[T](node: ptr TreeNode[T]) =
   var n: TreeNode[T] = node[]
   node[] = n.right
-  discard insert(node[], n)
+  insert(node[], n)
 
 proc rotate_lr[T](nodeptr: ptr TreeNode[T]) =
   var node: TreeNode[T] = nodeptr[]
   nodeptr[] = node.left.right
   nodeptr.right = node.right
-  discard insert(nodeptr[], node)
+  insert(nodeptr[], node)
 
 proc rotate_rl[T](nodeptr: ptr TreeNode[T]) =
   var node: TreeNode[T] = nodeptr[]
   nodeptr[] = node.right.left
   nodeptr.left = node.left
-  discard insert(nodeptr[], node)
+  insert(nodeptr[], node)
 
 
 proc delete[T](parent: TreeNode[T], target: TreeNode[T]) =
@@ -73,18 +68,18 @@ proc delete[T](parent: TreeNode[T], target: TreeNode[T]) =
 
 
 
-proc search[T](node: TreeNode[T], key: T): TreeNode =
+proc search[T](node: TreeNode[T], key: T): Option[TreeNode] =
   if node == nil:
-    return nil
+    return none(T)
   if node.value == key:
-    return node
+    return some(node)
   if key < node.value:
     return search(node.left, key)
   else:
     return search(node.right, key)
 
 proc has_children[T](node: TreeNode[T]): bool =
-  if node ==nil:
+  if node == nil:
     return false
   else:
     return node.right != nil and node.right != nil
@@ -95,49 +90,23 @@ proc height[T](node: TreeNode[T]): int =
   else:
     return 1 + max(height(node.left), height(node.right))
 
-proc balanced[T](node: TreeNode[T]): (bool, TreeSide) =
+proc balanced[T](node: TreeNode[T]): bool =
   ## returns true if children on target node are balanced, enum is ignored
   ## if false TreeSide enum will determine which side is bigger
   if node == nil:
-    return (true, TreeSide.Right)
+    return true
   else:
     var num = height(node.right) - height(node.left)
     if num > 2:
-      return (false, TreeSide.Right)
+      return false
     elif num < (-2):
-      return (false, TreeSide.Left)
+      return false
     else:
-      return (true, TreeSide.None)
+      return true
 
 proc balance[T](node: ptr TreeNode[T]) =
-  # does this function check if thing are balanced and then 
-  var (is_balanced, side) = balanced(node[])
-  if not is_balanced:
-    case side:
-      of TreeSide.Left:
-        var (blanced, lower_side) = balanced(node[].left)
-        if not blanced:
-          balance(node[].left.addr)
-          case lower_side:
-            of TreeSide.Left:
-              rotate_ll(node)
-            of TreeSide.Right:
-              rotate_lr(node)
-            else:
-              return
-      of TreeSide.Right:
-        var (blanced, lower_side) = balanced(node[].right)
-        if not blanced:
-          balance(node[].right.addr)
-          case lower_side:
-            of TreeSide.Left:
-              rotate_rl(node)
-            of TreeSide.Right:
-              rotate_rr(node)
-            else:
-              return
-      else:
-        return
+  # does this function check if thing are balanced and then
+  echo "Balance is doing nothing"
 
 
 
@@ -154,26 +123,23 @@ proc newBTree*[T](): BinaryTree[T] =
   result.root = nil
   result.size = 0
 
-proc pop*[T](self: BinaryTree[T]): T {.raises: EmptyTreeError.} =
+proc pop*[T](self: var BinaryTree[T]): Option[T]  =
   if self.root == nil:
-    raise newException(EmptyTreeError, "pop operation on empty tree")
+    return none(T)
   else:
     var left = self.root.left
     var right = self.root.right
-    result = self.root.value
+    result = some(self.root.value)
     if left == nil and right != nil:
-      var rl = right.left
-      var rr = right.right
-      self.root = right
-      self.root.left = rl
-      self.root.right = rr
+      rotate_rr(self.root.addr)
     elif left != nil and right != nil:
-      self.root = left
-      discard insert(left.right, right)
-    else:
-      result = self.root.value
-      var r = self.root
+      rotate_ll(self.root.addr)
+    elif left == nil and right == nil:
       self.root = nil
+    else:
+      var r = self.root
+      self.root = left
+      insert(self.root, right)
       reset(r)
 
 
@@ -185,15 +151,13 @@ proc push*[T](self: BinaryTree[T], value: T) =
   if self.root == nil:
     self.root = node
   else:
-    discard insert(self.root, node)
-    balance(self.root.addr())
+    insert(self.root, node)
 
-proc peek*[T](self: BinaryTree[T]): T {.raises: EmptyTreeError.} =
+proc peek*[T](self: BinaryTree[T]): Option[T] =
   if self.root == nil:
-    raise newException(EmptyTreeError, "attempted peek")
+    return none(T)
   else:
-    result = self.root.value
+    result = some(self.root.value)
 
 proc is_balanced*[T](self: BinaryTree[T]): bool =
-  var (b, t) = balanced(self.root)
-  return b
+  return balanced(self.root)
