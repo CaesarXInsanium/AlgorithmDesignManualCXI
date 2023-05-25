@@ -203,3 +203,5 @@ were peeled out and then each item in the queue was updated and then
 resorted.
 
 Best possible savings is two thirds and fifty percent savings was normally reached.
+
+## 3.6 

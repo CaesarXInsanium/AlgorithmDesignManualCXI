@@ -3,6 +3,7 @@ type
   TreeNode*[T] = ref object
     left: TreeNode[T]
     right: TreeNode[T]
+    height: int
     value: T
   BinaryTree*[T] = ref object
     root: TreeNode[T]
@@ -10,25 +11,30 @@ type
 
 proc newTreeNode[T](value: T): TreeNode[T] =
   ## sample documentation
-  result = TreeNode[T](value: value, left: nil, right: nil)
+  result = TreeNode[T](value: value, left: nil, right: nil, height: 0)
 
 proc insert[T](node: TreeNode[T], other: TreeNode[T]) =
-  assert other != nil
+  # assert other != nil
+
   if node == nil and other == nil:
     echo "insertion with two nil nodes"
     return
-  elif other.value < node.value:
-    if node.left == nil:
-      node.left = other
-    else:
-      insert(node.left, other)
-  elif other.value > node.value:
-    if node.right == nil:
-      node.right = other
-    else:
-      insert(node.right, other)
-  elif other.value == node.value:
-    return
+  if node != nil and other != nil:
+    other.height = node.height - 1
+    if other.value < node.value:
+      node.height = node.height + 1
+      if node.left == nil:
+        node.left = other
+      else:
+        insert(node.left, other)
+    elif other.value > node.value:
+      node.height = node.height + 1
+      if node.right == nil:
+        node.right = other
+      else:
+        insert(node.right, other)
+    elif other.value == node.value:
+      return
 
 proc rotate_ll[T](node: ptr TreeNode[T]) =
   var n: TreeNode[T] = node[]
@@ -84,25 +90,20 @@ proc has_children[T](node: TreeNode[T]): bool =
   else:
     return node.right != nil and node.right != nil
 
-proc height[T](node: TreeNode[T]): int =
+proc update_height[T](node: TreeNode[T]): int =
   if node == nil:
     return 0
   else:
-    return 1 + max(height(node.left), height(node.right))
+    return 1 + max(update_height(node.left), update_height(node.right))
 
 proc balanced[T](node: TreeNode[T]): bool =
+  if node.right == nil or node.left == nil:
+    return true
+  elif node.right != nil and node.left != nil:
+    return abs(node.right.height - node.left.height) > 1
+
   ## returns true if children on target node are balanced, enum is ignored
   ## if false TreeSide enum will determine which side is bigger
-  if node == nil:
-    return true
-  else:
-    var num = height(node.right) - height(node.left)
-    if num > 2:
-      return false
-    elif num < (-2):
-      return false
-    else:
-      return true
 
 proc balance[T](node: ptr TreeNode[T]) =
   # does this function check if thing are balanced and then
@@ -114,8 +115,8 @@ proc `$`[T](self: TreeNode[T]): string =
   if self == nil:
     return "nil"
   else:
-    return "Self {\nvalue: " & $self.value & "\nright: " & $self.right &
-        "\nleft: " & $self.left & "\n}"
+    return "TreeNode {\nvalue: " & $self.value & "\n\tright: " & $self.right &
+        "\tleft: " & $self.left & "\n}"
 
 
 proc newBTree*[T](): BinaryTree[T] =
@@ -123,10 +124,11 @@ proc newBTree*[T](): BinaryTree[T] =
   result.root = nil
   result.size = 0
 
-proc pop*[T](self: var BinaryTree[T]): Option[T]  =
+proc pop*[T](self: var BinaryTree[T]): Option[T] =
   if self.root == nil:
     return none(T)
   else:
+    self.size = self.size - 1
     var left = self.root.left
     var right = self.root.right
     result = some(self.root.value)
@@ -148,6 +150,7 @@ proc empty*[T](self: BinaryTree[T]): bool =
 
 proc push*[T](self: BinaryTree[T], value: T) =
   var node = newTreeNode[T](value)
+  self.size = self.size + 1
   if self.root == nil:
     self.root = node
   else:
@@ -161,3 +164,9 @@ proc peek*[T](self: BinaryTree[T]): Option[T] =
 
 proc is_balanced*[T](self: BinaryTree[T]): bool =
   return balanced(self.root)
+
+proc height*[T](self: BinaryTree[T]): int =
+  return self.root.height
+
+proc `$`*[T](self: BinaryTree[T]): string =
+  result ="Tree -> size: " & $self.size & "\nHead: \t" & $self.root

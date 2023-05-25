@@ -29,3 +29,10 @@ test "tree is unbalanced":
   for i in 0..9:
     t.push(cast[float64](i))
   check not t.is_balanced()
+
+test "tree height":
+  var t = newBTree[int]()
+  for i in 0..5:
+    t.push(i)
+  echo $t
+  check t.height() == 5
