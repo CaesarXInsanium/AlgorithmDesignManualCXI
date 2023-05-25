@@ -13,64 +13,103 @@ proc newTreeNode[T](value: T): TreeNode[T] =
   ## sample documentation
   result = TreeNode[T](value: value, left: nil, right: nil, height: 0)
 
-proc insert[T](node: TreeNode[T], other: TreeNode[T]) =
-  # assert other != nil
+proc most_left_child[T](self: TreeNode[T]): TreeNode[T] =
+  if self.left == nil:
+    return self
+  else:
+    return most_left_child(self.left)
 
-  if node == nil and other == nil:
-    echo "insertion with two nil nodes"
-    return
-  if node != nil and other != nil:
-    other.height = node.height - 1
-    if other.value < node.value:
-      node.height = node.height + 1
+proc most_right_child[T](self: TreeNode[T]): TreeNode[T] =
+  if self.right == nil:
+    return self
+  else:
+    return most_right_child(self.right)
+
+
+proc get_height*[T](self: TreeNode[T]): int =
+  if self == nil:
+    return 0
+  else:
+    return self.height
+
+proc update_height[T](self: TreeNode[T]) =
+  self.height = 1 + max(get_height(self.right), get_height(self.left))
+
+proc rotate_right[T](self: TreeNode[T]): TreeNode[T] =
+  var x = self.left
+  var z = x.right
+  x.right = self
+  self.left = z
+  update_height(self)
+  update_height(x)
+  return x
+
+proc rotate_left[T](self: TreeNode[T]): TreeNode[T] =
+  var x = self.right
+  var z = x.left
+  x.right = self
+  self.left = z
+  update_height(self)
+  update_height(x)
+  return x
+
+proc get_balance[T](self: TreeNode[T]): int = 
+  if self == nil:
+    return 0
+  else:
+    get_height(self.right) - get_height(self.left)
+
+proc rebalance[T](z: TreeNode[T]): TreeNode[T] = 
+  update_height(z)
+  var balance = get_balance(z)
+
+  if balance > 1:
+    if (get_height(z.right.right) > get_height(z.right.left)):
+      z = rotate_left(z)
+    else:
+      z.right = rotate_right(z.right)
+      z = rotate_left(z)
+  elif balance < -1:
+    if (get_height(z.left.left) > get_height(z.left.right)):
+      z = rotate_right(z)
+    else:
+      z.left = rotate_left(z.left)
+      z = rotate_right(z)
+  return z
+
+proc insert[T](node: TreeNode[T], value: T): TreeNode[T] =
+  if node == nil:
+    return newTreeNode[T](value)
+  elif (node.value > value):
+    node.left = insert(node.left, value)
+  elif (node.value < value):
+    node.right = insert(node.right, value)
+  else:
+    echo "Duplicate value"
+  return rebalance(node)
+
+proc delete[T](node: TreeNode[T], key: T): TreeNode[T] =
+  if node == nil:
+    return node
+  elif node.value > key:
+    node.left = delete(node.left, key)
+  elif node.value < key:
+    node.right = delete(node.right, key)
+  else:
+    if node.left == nil or node.right == nil:
+      var node: TreeNode[T]
       if node.left == nil:
-        node.left = other
+        node = node.right
       else:
-        insert(node.left, other)
-    elif other.value > node.value:
-      node.height = node.height + 1
-      if node.right == nil:
-        node.right = other
-      else:
-        insert(node.right, other)
-    elif other.value == node.value:
-      return
+        node = node.left
+    else:
+      var most_left = most_left_child(node.right)
+      node.value = most_left.value
+      node.right = delete(node.right, node.key)
 
-proc rotate_ll[T](node: ptr TreeNode[T]) =
-  var n: TreeNode[T] = node[]
-  node[] = n.left
-  insert(node[], n)
-
-proc rotate_rr[T](node: ptr TreeNode[T]) =
-  var n: TreeNode[T] = node[]
-  node[] = n.right
-  insert(node[], n)
-
-proc rotate_lr[T](nodeptr: ptr TreeNode[T]) =
-  var node: TreeNode[T] = nodeptr[]
-  nodeptr[] = node.left.right
-  nodeptr.right = node.right
-  insert(nodeptr[], node)
-
-proc rotate_rl[T](nodeptr: ptr TreeNode[T]) =
-  var node: TreeNode[T] = nodeptr[]
-  nodeptr[] = node.right.left
-  nodeptr.left = node.left
-  insert(nodeptr[], node)
-
-
-proc delete[T](parent: TreeNode[T], target: TreeNode[T]) =
-  if target == nil:
-    return
-  var left = target.left
-  var right = target.right
-  if parent.left == target:
-    parent.left = left
-    insert(parent.right, right)
-  elif parent.right == target:
-    parent.right = right
-    insert(parent.left, left)
-  reset(target)
+  if node != nil:
+    node = rebalance(node)
+  return node
 
 
 
@@ -90,11 +129,7 @@ proc has_children[T](node: TreeNode[T]): bool =
   else:
     return node.right != nil and node.right != nil
 
-proc update_height[T](node: TreeNode[T]): int =
-  if node == nil:
-    return 0
-  else:
-    return 1 + max(update_height(node.left), update_height(node.right))
+
 
 proc balanced[T](node: TreeNode[T]): bool =
   if node.right == nil or node.left == nil:
@@ -128,33 +163,15 @@ proc pop*[T](self: var BinaryTree[T]): Option[T] =
   if self.root == nil:
     return none(T)
   else:
-    self.size = self.size - 1
-    var left = self.root.left
-    var right = self.root.right
     result = some(self.root.value)
-    if left == nil and right != nil:
-      rotate_rr(self.root.addr)
-    elif left != nil and right != nil:
-      rotate_ll(self.root.addr)
-    elif left == nil and right == nil:
-      self.root = nil
-    else:
-      var r = self.root
-      self.root = left
-      insert(self.root, right)
-      reset(r)
+    self.root = delete(self.root, self.root.value)
 
 
 proc empty*[T](self: BinaryTree[T]): bool =
   result = self.root == nil
 
 proc push*[T](self: BinaryTree[T], value: T) =
-  var node = newTreeNode[T](value)
-  self.size = self.size + 1
-  if self.root == nil:
-    self.root = node
-  else:
-    insert(self.root, node)
+  self.root = insert(self.root, value)
 
 proc peek*[T](self: BinaryTree[T]): Option[T] =
   if self.root == nil:
