@@ -132,13 +132,13 @@ proc has_children[T](node: TreeNode[T]): bool =
 
 
 proc balanced[T](node: TreeNode[T]): bool =
+  ## returns true if children on target node are balanced, enum is ignored
+  ## if false TreeSide enum will determine which side is bigger
   if node.right == nil or node.left == nil:
     return true
   elif node.right != nil and node.left != nil:
     return abs(node.right.height - node.left.height) > 1
 
-  ## returns true if children on target node are balanced, enum is ignored
-  ## if false TreeSide enum will determine which side is bigger
 
 proc balance[T](node: ptr TreeNode[T]) =
   # does this function check if thing are balanced and then

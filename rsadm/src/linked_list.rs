@@ -38,14 +38,14 @@ where
         return self.value;
     }
 
-    fn null() -> Self{
-        Self{
+    fn null() -> Self {
+        Self {
             value: None,
-            next: None
+            next: None,
         }
     }
 
-    fn set_null(&mut self){
+    fn set_null(&mut self) {
         self.value = None;
         self.next = None;
     }
@@ -97,9 +97,9 @@ where
         if let Some(head_index) = self.head {
             node.set_next(head_index);
             self.head = Some(new_index);
-            if self.mem.len() as usize > new_index{
+            if self.mem.len() as usize > new_index {
                 self.mem[new_index as usize] = node;
-            }else{
+            } else {
                 self.mem.push(node);
             }
         } else {
@@ -118,16 +118,15 @@ where
     }
 
     pub fn pop(&mut self) -> Option<T> {
-        if let Some(head_index) = self.head{
+        if let Some(head_index) = self.head {
             let head_node = self.node_at(head_index);
-            if head_node.is_null(){
+            if head_node.is_null() {
                 panic!("Head Index points to null node");
-                return None;
             }
             let next_index = head_node.next;
             self.head = next_index;
-            head_node.value() 
-        }else{
+            head_node.value()
+        } else {
             None
         }
     }

@@ -5,9 +5,10 @@ type
 
   LinkedList*[T] = object
     head: ptr Node[T]
-    len: uint
+    size: uint
 
 proc newNode[T](data: T): ptr Node[T] =
+  ## Allocates new pointer opject on the heap
   result = cast[ptr Node[T]](alloc0(sizeof(Node[T])))
   result.value = data
   result.next = nil
@@ -38,3 +39,12 @@ proc pop*[T](self: ptr LinkedList[T], default: T): (bool, T) =
     reset(to_delete)
     return (true, data)
 
+
+proc newLinkedList[T](): ptr LinkedList[T] = 
+  result = cast[ptr LinkedList[T]](alloc0(sizeof(LinkedList[T])))
+  result.head = nil
+  result.size = 0
+
+when isMainModule:
+  echo "Hello World!"
+  var list  = newLinkedList[int]()

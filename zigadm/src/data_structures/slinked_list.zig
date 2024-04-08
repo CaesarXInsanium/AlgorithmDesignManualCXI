@@ -1,6 +1,7 @@
 const std = @import("std");
 const print = std.debug.print;
 const Allocator = std.mem.Allocator;
+
 pub fn LinkedList(comptime T: type) type {
     return struct {
         const Node = struct {
