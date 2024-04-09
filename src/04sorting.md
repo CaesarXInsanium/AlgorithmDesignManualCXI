@@ -51,3 +51,34 @@ void qsort (void *ARRAY, size_t COUNT, size_t SIZE, comparison_fn_t COMPARE);
 ```
 
 ## 4.3 Heapsort: Fast Sorting Via Data Structures
+
+**Selection Sort** :: works by sweeping over the data and finding the smallest element
+and swapping with first element. Then sweeps again and swaps with second element.
+This continues until the array is sorted. The worst possible case is if the array
+is sorted in the wrong order. This results in linear time.
+
+### 4.3.1 Heaps
+
+Heaps work by maintaining partial order of elements. Each tree can be visualized
+with a tree. Each node is bigger than its children. An index variable serves as
+a pointer. With use of function to determine parent and child nodes.
+
+```lisp
+{{#include ../examples/heap.scm}}
+```
+
+These functions work best if array indexing starts at one. The biggest downside
+is the wasted space that gets worse the bigger the tree grows. Auto balancing is
+required in order to maintain the correct properties in which it is sorted. This
+bay be less flexible compare to binary search but is perfect for heaps. The naive
+approach is to insert elements into first empty slot. Then what needs to happen
+is to traverse back up the tree and swap elements until there fufill certain properties.
+
+```c
+// into first empty slot
+void pq_insert(priority_queue *q, item_type x);
+// swaps items in a heap until it satifies certain properties
+void bubble_up(priority_queue *q, int p);
+```
+
+### 4.3.1 Extractive the Minimum
