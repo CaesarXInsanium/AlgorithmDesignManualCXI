@@ -8,3 +8,4 @@ title = "Algorithm Design Manual Notes"
 [output.html]
 mathjax-support=true
 
+[output.pdf]
